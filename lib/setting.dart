@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'checkin_page.dart';
 import 'profile_page.dart';
+import 'toko.dart';
 
 class Settingpage extends StatelessWidget {
   const Settingpage({super.key});
@@ -27,16 +28,6 @@ class Settingpage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              child: const Text('Checkin'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CheckInPage()),
-                );
-              },
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
               child: const Text('Profile'),
               onPressed: () {
                 Navigator.push(
@@ -45,6 +36,28 @@ class Settingpage extends StatelessWidget {
                 );
               },
             ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              child: const Text('Checkin'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CheckInPage()),
+                );
+              },
+            ),
+            
+            const SizedBox(height: 10),
+            ElevatedButton(
+              child: const Text('Toko'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Toko()),
+                );
+              },
+            ),
+            
             const SizedBox(height: 10),
             ElevatedButton(
               child: const Text('Back'),

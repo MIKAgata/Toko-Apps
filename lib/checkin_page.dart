@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'setting.dart';
 import 'profile_page.dart';
+import 'toko.dart';
 
 class CheckInPage extends StatelessWidget {
   const CheckInPage({super.key});
@@ -10,14 +11,14 @@ class CheckInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CheckIn Page'),
+        title: const Text('CheckIn'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              child: const Text('Ke Home Page'),
+              child: const Text('Home'),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -27,7 +28,7 @@ class CheckInPage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              child: const Text('Ke Profile Page'),
+              child: const Text('Profile'),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -37,7 +38,7 @@ class CheckInPage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              child: const Text('Ke Setting'),
+              child: const Text('Setting'),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -47,7 +48,17 @@ class CheckInPage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              child: const Text('Kembali'),
+              child: const Text('Toko'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Toko()),
+                );
+              },
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              child: const Text('Back'),
               onPressed: () {
                 Navigator.pop(context);
               },

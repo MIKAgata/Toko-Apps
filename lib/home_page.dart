@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'profile_page.dart';
 import 'checkin_page.dart';
 import 'setting.dart';
+import 'toko.dart';
+
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -47,11 +49,21 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              child: const Text('Back'),
+              child: const Text('Toko'),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Toko()),
+                );
               },
             ),
+            // const SizedBox(height: 10),
+            // ElevatedButton(
+            //   child: const Text('Back'),
+            //   onPressed: () {
+            //     Navigator.pop(context);
+            //   },
+            // ),
           ],
         ),
       ),

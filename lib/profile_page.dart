@@ -12,14 +12,14 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile Page'),
+        title: const Text('Profile'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              child: const Text('Ke Home Page'),
+              child: const Text('Home'),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -29,7 +29,7 @@ class ProfilePage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              child: const Text('Ke CheckIn Page'),
+              child: const Text('CheckIn'),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -39,7 +39,7 @@ class ProfilePage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              child: const Text('Ke Setting'),
+              child: const Text('Setting'),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -60,7 +60,7 @@ class ProfilePage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              child: const Text('Kembali'),
+              child: const Text('Back'),
               onPressed: () {
                 Navigator.pop(context);
               },

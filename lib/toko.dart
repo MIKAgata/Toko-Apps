@@ -19,7 +19,7 @@ class Toko extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              child: const Text('Ke Home Page'),
+              child: const Text('Home'),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -27,19 +27,10 @@ class Toko extends StatelessWidget {
                 );
               },
             ),
+            
             const SizedBox(height: 10),
             ElevatedButton(
-              child: const Text('Ke setting Page'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CheckInPage()),
-                );
-              },
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              child: const Text('Ke profile page'),
+              child: const Text('Profile'),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -47,6 +38,17 @@ class Toko extends StatelessWidget {
                 );
               },
             ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              child: const Text('Checkin'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CheckInPage()),
+                );
+              },
+            ),
+            
             const SizedBox(height: 10),
             ElevatedButton(
               child: const Text('Setting'),
@@ -59,7 +61,7 @@ class Toko extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              child: const Text('Kembali'),
+              child: const Text('Back'),
               onPressed: () {
                 Navigator.pop(context);
               },
