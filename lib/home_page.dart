@@ -4,7 +4,7 @@ import 'checkin_page.dart';
 import 'setting.dart';
 import 'toko.dart';
 
-/// Main HomePage dengan Bottom Navigation
+/// Main HomePage dengan Bottom Navigation - Tokopedia Dark Mode
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _screens = [
-      const Toko(), // Home/Toko
+      const TokoWithAppBar(), // Home/Toko dengan AppBar
       const CheckInPage(), // CheckIn/Keranjang
       const ProfilePage(), // Profile
       const Settingpage(), // Setting
@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF1C1C1C), // Dark background
       body: IndexedStack(
         index: _currentIndex,
         children: _screens,
@@ -44,10 +45,12 @@ class _HomePageState extends State<HomePage> {
           });
         },
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color(0xFF00AA5B),
-        unselectedItemColor: Colors.grey,
+        backgroundColor: const Color(0xFF2C2C2C), // Dark surface
+        selectedItemColor: const Color(0xFF03AC0E), // Tokopedia green (dark mode)
+        unselectedItemColor: const Color(0xFF808080), // Medium gray
         selectedFontSize: 12,
         unselectedFontSize: 12,
+        elevation: 8,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
@@ -57,7 +60,7 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart_outlined),
             activeIcon: Icon(Icons.shopping_cart),
-            label: 'Shop',
+            label: 'CheckIn',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
@@ -71,6 +74,138 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Wrapper untuk Toko dengan Custom AppBar - Tokopedia Dark Mode
+class TokoWithAppBar extends StatelessWidget {
+  const TokoWithAppBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF1C1C1C), // Dark background
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF2C2C2C), // Dark surface untuk AppBar
+        elevation: 2,
+        shadowColor: Colors.black.withOpacity(0.3),
+        title: Row(
+          children: [
+            // Search Box
+            Expanded(
+              child: Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF3C3C3C), // Dark search box
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: const Color(0xFF4C4C4C), // Subtle border
+                    width: 1,
+                  ),
+                ),
+                child: TextField(
+                  style: const TextStyle(
+                    color: Color(0xFFFFFFFF), // White text
+                    fontSize: 14,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'Cari produk, kategori, brand...',
+                    hintStyle: const TextStyle(
+                      color: Color(0xFF808080), // Gray hint text
+                      fontSize: 14,
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      color: Color(0xFF03AC0E), // Green icon
+                      size: 20,
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                  ),
+                  onTap: () {
+                    // Fake search - tidak melakukan apa-apa
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text(
+                          'Fitur pencarian dalam pengembangan',
+                          style: TextStyle(color: Color(0xFFFFFFFF)),
+                        ),
+                        backgroundColor: const Color(0xFF2C2C2C),
+                        duration: const Duration(seconds: 1),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          // Keranjang Icon dengan Badge
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(
+                  Icons.shopping_cart_outlined,
+                  color: Color(0xFFFFFFFF), // White icon
+                  size: 24,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CheckInPage()),
+                  );
+                },
+              ),
+              Positioned(
+                right: 8,
+                top: 8,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFFF4444), // Bright red untuk dark mode
+                    shape: BoxShape.circle,
+                  ),
+                  constraints: const BoxConstraints(
+                    minWidth: 16,
+                    minHeight: 16,
+                  ),
+                  child: const Text(
+                    '3',
+                    style: TextStyle(
+                      color: Color(0xFFFFFFFF),
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          
+          // Profile Icon
+          IconButton(
+            icon: const Icon(
+              Icons.person_outline,
+              color: Color(0xFFFFFFFF), // White icon
+              size: 24,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfilePage()),
+              );
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
+      ),
+      body: const Toko(), // Halaman Toko original Anda
     );
   }
 }
