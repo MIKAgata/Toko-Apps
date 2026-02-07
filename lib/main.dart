@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ZERO Company',
+      title: 'ZERO Store',
       debugShowCheckedModeBanner: false,
       home: const HomePage(),
     );
