@@ -289,10 +289,10 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       ),
       body: Column(
         children: [
-          // Banner Promo Section
+          
           _buildBannerSection(),
           
-          // Halaman Toko (sisanya)
+          
           const Expanded(
             child: Toko(),
           ),
@@ -301,13 +301,13 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     );
   }
 
-  /// Build Banner Section dengan Auto-Slide
+  
   Widget _buildBannerSection() {
     return Column(
       children: [
         const SizedBox(height: 16),
         
-        // Banner Slider
+      
         SizedBox(
           height: 180,
           child: PageView.builder(
