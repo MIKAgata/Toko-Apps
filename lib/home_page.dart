@@ -5,7 +5,7 @@ import 'checkin_page.dart';
 import 'setting.dart';
 // import 'toko.dart';
 
-/// Main HomePage dengan Bottom Navigation - Tokopedia Dark Mode
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -16,18 +16,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
-  // List screens untuk IndexedStack
   late final List<Widget> _screens;
 
   @override
   void initState() {
     super.initState();
     _screens = [
-      const TokoWithAppBar(), // Home/Toko dengan AppBar
-      const CheckInPage(), // CheckIn/Keranjang
-      const ProfilePage(), // Profile
-      const Settingpage(), // Setting
-    ];
+      const TokoWithAppBar(),
+      const CheckInPage(), 
+      const ProfilePage(), 
+      const Settingpage(),
+    ]; 
   }
 
   @override
@@ -78,34 +77,29 @@ class _HomePageState extends State<HomePage> {
 
 /// Tokopedia Color Palette - Dark Mode
 class TokopediaColors {
-  // Primary Colors
-  static const Color primary = Color(0xFF42B549); // Tokopedia Green
+  
+  static const Color primary = Color(0xFF42B549); 
   static const Color primaryLight = Color(0xFF5BC862);
   static const Color primaryDark = Color(0xFF2FA037);
 
-  // Background Colors
-  static const Color background = Color(0xFF0E1113); // Dark background
+  static const Color background = Color(0xFF0E1113); 
   static const Color cardBackground = Color(0xFF1A1D1F);
   static const Color searchBackground = Color(0xFF272B30);
 
-  // Text Colors
   static const Color textPrimary = Color(0xFFFFFFFF);
   static const Color textSecondary = Color(0xFFADB5BD);
   static const Color textTertiary = Color(0xFF6C757D);
 
-  // Accent Colors
   static const Color orange = Color(0xFFFF6B00);
   static const Color red = Color(0xFFFF4444);
   static const Color yellow = Color(0xFFFFCC00);
 
-  // Divider
   static const Color divider = Color(0xFF2D3134);
 
-  // Border
   static const Color border = Color(0xFF3A3F42);
 }
 
-/// Product Model
+
 class Product {
   final String name;
   final String price;
@@ -132,7 +126,7 @@ class Product {
   });
 }
 
-/// Wrapper untuk Toko dengan Custom AppBar dan Banner Promo
+
 class TokoWithAppBar extends StatefulWidget {
   const TokoWithAppBar({super.key});
 
@@ -145,7 +139,6 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
   int _currentBannerIndex = 0;
   Timer? _bannerTimer;
 
-  // Data banner promo
   final List<Map<String, dynamic>> _bannerData = [
     {
       'gradient': const LinearGradient(
@@ -185,7 +178,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     },
   ];
 
-  // Dummy Product Data
+
   final List<Product> _products = [
     Product(
       name: 'iPhone 15 Pro Max 256GB Garansi Resmi iBox Indonesia',
@@ -375,7 +368,6 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
           ],
         ),
         actions: [
-          // Keranjang Icon dengan Badge
           Stack(
             children: [
               IconButton(
@@ -419,7 +411,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
               ),
             ],
           ),
-          // Profile Icon
+
           IconButton(
             icon: const Icon(
               Icons.person_outline,
@@ -497,7 +489,6 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     );
   }
 
-  /// Build Banner Section
   Widget _buildBannerSection() {
     return Column(
       children: [
@@ -522,7 +513,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
           ),
         ),
         const SizedBox(height: 12),
-        // Dot Indicators
+  
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
@@ -545,7 +536,6 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     );
   }
 
-  /// Build individual banner item
   Widget _buildBannerItem({
     required LinearGradient gradient,
     required String title,
@@ -622,7 +612,6 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     );
   }
 
-  /// Build Categories Section
   Widget _buildCategoriesSection() {
     final categories = [
       {
@@ -680,7 +669,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     );
   }
 
-  /// Build Product Card - Tokopedia Style
+
   Widget _buildProductCard(Product product) {
     return Container(
       decoration: BoxDecoration(
@@ -741,7 +730,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
             ],
           ),
 
-          // Product Info
+
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8),
@@ -762,7 +751,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
 
                   const SizedBox(height: 6),
 
-                  // Price
+
                   Text(
                     product.price,
                     style: const TextStyle(
@@ -772,7 +761,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
                     ),
                   ),
 
-                  // Original Price (crossed out)
+
                   if (product.originalPrice.isNotEmpty)
                     Text(
                       product.originalPrice,
@@ -785,7 +774,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
 
                   const Spacer(),
 
-                  // Rating, Sold & Location
+
                   Row(
                     children: [
                       const Icon(
@@ -850,7 +839,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
 
                   const SizedBox(height: 6),
 
-                  // Badge & Free Shipping
+
                   Row(
                     children: [
                       if (product.badge.isNotEmpty)
