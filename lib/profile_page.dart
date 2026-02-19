@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_latihan/toko.dart';
 import 'home_page.dart';
-import 'checkin_page.dart';
+import 'cart.dart';
 import 'setting.dart';
 
 
