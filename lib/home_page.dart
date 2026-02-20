@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'profile_page.dart';
+import 'chat_page.dart';
 import 'cart.dart';
 import 'setting.dart';
 // import 'toko.dart';
