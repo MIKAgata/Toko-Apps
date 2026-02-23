@@ -60,7 +60,7 @@ class _CheckInPageState extends State<CheckInPage> {
   bool _selectAll = true;
   // String _voucherCode = '';
 
-  // Dummy Cart Items
+  
   final List<CartItem> _cartItems = [
     CartItem(
       id: '1',
@@ -104,7 +104,7 @@ class _CheckInPageState extends State<CheckInPage> {
     );
   }
 
-  /// Build AppBar
+  
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       backgroundColor: TokopediaColors.cardBackground,
@@ -157,7 +157,7 @@ class _CheckInPageState extends State<CheckInPage> {
     );
   }
 
-  /// Build Empty Cart
+
   Widget _buildEmptyCart() {
     return Center(
       child: Column(
@@ -218,11 +218,11 @@ class _CheckInPageState extends State<CheckInPage> {
     );
   }
 
-  /// Build Cart Content
+
   Widget _buildCartContent() {
     return Column(
       children: [
-        // Select All Section
+
         _buildSelectAllSection(),
 
         const Divider(
