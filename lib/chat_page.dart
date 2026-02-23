@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'home_page.dart';
 // import 'chat_page.dart';
 import 'setting.dart';
-// import 'toko.dart';
 
 /// Tokopedia Color Palette - Dark Mode
 class TokopediaColors {

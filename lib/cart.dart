@@ -4,7 +4,7 @@ import 'home_page.dart';
 // import 'profile_page.dart';
 // import 'toko.dart';
 
-/// Tokopedia Color Palette - Dark Mode
+
 class TokopediaColors {
   static const Color primary = Color(0xFF42B549);
   static const Color primaryLight = Color(0xFF5BC862);
@@ -21,7 +21,6 @@ class TokopediaColors {
   static const Color border = Color(0xFF3A3F42);
 }
 
-/// Cart Item Model
 class CartItem {
   final String id;
   final String name;
