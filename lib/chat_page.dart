@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
-// import 'chat_page.dart';
 import 'setting.dart';
 
-/// Tokopedia Color Palette - Dark Mode
+
 class TokopediaColors {
   static const Color primary = Color(0xFF42B549);
   static const Color primaryLight = Color(0xFF5BC862);
