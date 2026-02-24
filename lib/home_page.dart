@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-/// Tokopedia Color Palette - Dark Mode
+
 class TokopediaColors {
   
   static const Color primary = Color(0xFF42B549); 

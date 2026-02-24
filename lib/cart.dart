@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
-// import 'setting.dart';
-// import 'profile_page.dart';
-// import 'toko.dart';
+
 
 
 class TokopediaColors {

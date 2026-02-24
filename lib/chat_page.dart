@@ -19,7 +19,7 @@ class TokopediaColors {
   static const Color border = Color(0xFF3A3F42);
 }
 
-/// Chat Model
+
 class ChatMessage {
   final String id;
   final String sellerName;
@@ -59,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   late TabController _tabController;
   final TextEditingController _searchController = TextEditingController();
 
-  // Dummy Chat Data
+
   final List<ChatMessage> _chats = [
     ChatMessage(
       id: '1',
