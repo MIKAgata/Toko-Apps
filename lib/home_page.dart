@@ -134,7 +134,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
 
   final List<Map<String, dynamic>> _bannerData = [
     {
-      'imageUrl': 'assets/images/banner/b.jpg', // Ganti dengan nama file Anda
+      'imageUrl': 'assets/images/benner/b.jpg', // Ganti dengan nama file Anda
       'gradient': const LinearGradient(
         colors: [Color(0xFF42B549), Color(0xFF5BC862)],
         begin: Alignment.topLeft,
@@ -144,7 +144,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       'subtitle': 'Diskon hingga 90%',
     },
     {
-      'imageUrl': 'assets/images/banner/b2.jpg',
+      'imageUrl': 'assets/images/benner/b2.jpg',
       'gradient': const LinearGradient(
         colors: [Color(0xFFFF6B00), Color(0xFFFF8A3D)],
         begin: Alignment.topLeft,
@@ -154,7 +154,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       'subtitle': 'Min. belanja Rp 0',
     },
     {
-      'imageUrl': 'assets/images/banner/b3.jpg',
+      'imageUrl': 'assets/images/benner/b3.jpg',
       'gradient': const LinearGradient(
         colors: [Color(0xFF2196F3), Color(0xFF42A5F5)],
         begin: Alignment.topLeft,
@@ -164,7 +164,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       'subtitle': 'Pakai OVO/GoPay',
     },
     {
-      'imageUrl': 'assets/images/banner/b4.jpg',
+      'imageUrl': 'assets/images/benner/b4.jpg',
       'gradient': const LinearGradient(
         colors: [Color(0xFF9C27B0), Color(0xFFBA68C8)],
         begin: Alignment.topLeft,
