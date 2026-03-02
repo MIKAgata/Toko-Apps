@@ -3,8 +3,6 @@ import 'dart:async';
 import 'chat_page.dart';
 import 'cart.dart';
 import 'setting.dart';
-// import 'toko.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,10 +21,10 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _screens = [
       const TokoWithAppBar(),
-      const CheckInPage(), 
-      const ProfilePage(), 
+      const CheckInPage(),
+      const ProfilePage(),
       const Settingpage(),
-    ]; 
+    ];
   }
 
   @override
@@ -75,14 +73,12 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-
 class TokopediaColors {
-  
-  static const Color primary = Color(0xFF42B549); 
+  static const Color primary = Color(0xFF42B549);
   static const Color primaryLight = Color(0xFF5BC862);
   static const Color primaryDark = Color(0xFF2FA037);
 
-  static const Color background = Color(0xFF0E1113); 
+  static const Color background = Color(0xFF0E1113);
   static const Color cardBackground = Color(0xFF1A1D1F);
   static const Color searchBackground = Color(0xFF272B30);
 
@@ -95,10 +91,8 @@ class TokopediaColors {
   static const Color yellow = Color(0xFFFFCC00);
 
   static const Color divider = Color(0xFF2D3134);
-
   static const Color border = Color(0xFF3A3F42);
 }
-
 
 class Product {
   final String name;
@@ -108,7 +102,7 @@ class Product {
   final double rating;
   final int sold;
   final String location;
-  final String imageUrl;
+  final String imageUrl; // Path ke images/produk/nama_file.jpg
   final bool isFreeShipping;
   final String badge;
 
@@ -126,7 +120,6 @@ class Product {
   });
 }
 
-
 class TokoWithAppBar extends StatefulWidget {
   const TokoWithAppBar({super.key});
 
@@ -141,6 +134,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
 
   final List<Map<String, dynamic>> _bannerData = [
     {
+      'imageUrl': 'assets/images/banner/b.jpg', // Ganti dengan nama file Anda
       'gradient': const LinearGradient(
         colors: [Color(0xFF42B549), Color(0xFF5BC862)],
         begin: Alignment.topLeft,
@@ -150,6 +144,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       'subtitle': 'Diskon hingga 90%',
     },
     {
+      'imageUrl': 'assets/images/banner/b2.jpg',
       'gradient': const LinearGradient(
         colors: [Color(0xFFFF6B00), Color(0xFFFF8A3D)],
         begin: Alignment.topLeft,
@@ -159,6 +154,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       'subtitle': 'Min. belanja Rp 0',
     },
     {
+      'imageUrl': 'assets/images/banner/b3.jpg',
       'gradient': const LinearGradient(
         colors: [Color(0xFF2196F3), Color(0xFF42A5F5)],
         begin: Alignment.topLeft,
@@ -168,6 +164,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       'subtitle': 'Pakai OVO/GoPay',
     },
     {
+      'imageUrl': 'assets/images/banner/b4.jpg',
       'gradient': const LinearGradient(
         colors: [Color(0xFF9C27B0), Color(0xFFBA68C8)],
         begin: Alignment.topLeft,
@@ -178,7 +175,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     },
   ];
 
-
+  // Product data dengan path ke images/produk/
   final List<Product> _products = [
     Product(
       name: 'iPhone 15 Pro Max 256GB Garansi Resmi iBox Indonesia',
@@ -188,7 +185,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 4.9,
       sold: 1250,
       location: 'Jakarta Pusat',
-      imageUrl: '',
+      imageUrl: 'images/produk/iphone15.jpg', // Ganti dengan nama file Anda
       isFreeShipping: true,
       badge: 'Power Merchant',
     ),
@@ -200,7 +197,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 4.8,
       sold: 890,
       location: 'Tangerang',
-      imageUrl: '',
+      imageUrl: 'images/produk/samsung_s24.jpg',
       isFreeShipping: true,
       badge: 'Official Store',
     ),
@@ -212,7 +209,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 4.7,
       sold: 2340,
       location: 'Surabaya',
-      imageUrl: '',
+      imageUrl: 'images/produk/xiaomi14.jpg',
       isFreeShipping: true,
       badge: 'Top Seller',
     ),
@@ -224,7 +221,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 5.0,
       sold: 456,
       location: 'Jakarta Selatan',
-      imageUrl: '',
+      imageUrl: 'images/produk/macbook_air.jpg',
       isFreeShipping: true,
       badge: 'Official Store',
     ),
@@ -236,7 +233,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 4.9,
       sold: 3450,
       location: 'Bandung',
-      imageUrl: '',
+      imageUrl: 'images/produk/sony_headphones.jpg',
       isFreeShipping: true,
       badge: 'Best Seller',
     ),
@@ -248,7 +245,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 4.8,
       sold: 5670,
       location: 'Jakarta Barat',
-      imageUrl: '',
+      imageUrl: 'images/produk/airpods_pro.jpg',
       isFreeShipping: true,
       badge: 'Power Merchant',
     ),
@@ -260,7 +257,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 4.9,
       sold: 678,
       location: 'Medan',
-      imageUrl: '',
+      imageUrl: 'images/produk/ipad_air.jpg',
       isFreeShipping: true,
       badge: 'Official Store',
     ),
@@ -272,7 +269,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 4.8,
       sold: 4560,
       location: 'Semarang',
-      imageUrl: '',
+      imageUrl: 'images/produk/logitech_mouse.jpg',
       isFreeShipping: false,
       badge: 'Top Seller',
     ),
@@ -291,7 +288,6 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     super.dispose();
   }
 
-  /// Auto-slide banner setiap 4 detik
   void _startBannerAutoSlide() {
     _bannerTimer = Timer.periodic(const Duration(seconds: 4), (timer) {
       if (_currentBannerIndex < _bannerData.length - 1) {
@@ -411,7 +407,6 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
               ),
             ],
           ),
-
           IconButton(
             icon: const Icon(
               Icons.person_outline,
@@ -430,13 +425,8 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       ),
       body: CustomScrollView(
         slivers: [
-          // Banner Section
           SliverToBoxAdapter(child: _buildBannerSection()),
-
-          // Categories Section
           SliverToBoxAdapter(child: _buildCategoriesSection()),
-
-          // Section Header
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
@@ -466,8 +456,6 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
               ),
             ),
           ),
-
-          // Product Grid
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             sliver: SliverGrid(
@@ -482,7 +470,6 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
               }, childCount: _products.length),
             ),
           ),
-
           const SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],
       ),
@@ -505,6 +492,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
             itemCount: _bannerData.length,
             itemBuilder: (context, index) {
               return _buildBannerItem(
+                imageUrl: _bannerData[index]['imageUrl'] as String,
                 gradient: _bannerData[index]['gradient'] as LinearGradient,
                 title: _bannerData[index]['title'] as String,
                 subtitle: _bannerData[index]['subtitle'] as String,
@@ -513,7 +501,6 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
           ),
         ),
         const SizedBox(height: 12),
-  
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
@@ -536,7 +523,9 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     );
   }
 
+  /// Build Banner Item - Dengan support untuk gambar dari assets
   Widget _buildBannerItem({
+    required String imageUrl,
     required LinearGradient gradient,
     required String title,
     required String subtitle,
@@ -544,7 +533,6 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        gradient: gradient,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -554,61 +542,84 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
           ),
         ],
       ),
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.transparent, Colors.black.withOpacity(0.3)],
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Stack(
+          children: [
+            // Background Image atau Gradient
+            Positioned.fill(
+              child: _buildImageOrGradient(imageUrl, gradient),
+            ),
+            // Overlay Gradient
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.transparent, Colors.black.withOpacity(0.5)],
+                ),
               ),
             ),
-          ),
-          Positioned(
-            left: 20,
-            bottom: 20,
-            right: 20,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    shadows: [
-                      Shadow(
-                        color: Colors.black45,
-                        offset: Offset(1, 1),
-                        blurRadius: 3,
-                      ),
-                    ],
+            // Text Content
+            Positioned(
+              left: 20,
+              bottom: 20,
+              right: 20,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black45,
+                          offset: Offset(1, 1),
+                          blurRadius: 3,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    shadows: [
-                      Shadow(
-                        color: Colors.black45,
-                        offset: Offset(1, 1),
-                        blurRadius: 3,
-                      ),
-                    ],
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black45,
+                          offset: Offset(1, 1),
+                          blurRadius: 3,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
+    );
+  }
+
+  /// Helper untuk menampilkan Image atau Gradient
+  Widget _buildImageOrGradient(String imageUrl, LinearGradient gradient) {
+    return Image.asset(
+      imageUrl,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        // Jika gambar tidak ditemukan, tampilkan gradient
+        return Container(
+          decoration: BoxDecoration(gradient: gradient),
+        );
+      },
     );
   }
 
@@ -669,7 +680,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     );
   }
 
-
+  /// Build Product Card - Dengan support untuk gambar dari assets
   Widget _buildProductCard(Product product) {
     return Container(
       decoration: BoxDecoration(
@@ -685,18 +696,33 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
             children: [
               Container(
                 height: 140,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: TokopediaColors.searchBackground,
-                  borderRadius: const BorderRadius.only(
+                  borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
                   ),
                 ),
-                child: Center(
-                  child: Icon(
-                    Icons.image_outlined,
-                    size: 60,
-                    color: TokopediaColors.textTertiary,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
+                  child: Image.asset(
+                    product.imageUrl,
+                    width: double.infinity,
+                    height: 140,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      // Jika gambar tidak ditemukan, tampilkan placeholder
+                      return Center(
+                        child: Icon(
+                          Icons.image_outlined,
+                          size: 60,
+                          color: TokopediaColors.textTertiary,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
@@ -730,14 +756,12 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
             ],
           ),
 
-
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Product Name
                   Text(
                     product.name,
                     maxLines: 2,
@@ -748,10 +772,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
                       height: 1.3,
                     ),
                   ),
-
                   const SizedBox(height: 6),
-
-
                   Text(
                     product.price,
                     style: const TextStyle(
@@ -760,8 +781,6 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
-
                   if (product.originalPrice.isNotEmpty)
                     Text(
                       product.originalPrice,
@@ -771,10 +790,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
                         decoration: TextDecoration.lineThrough,
                       ),
                     ),
-
                   const Spacer(),
-
-
                   Row(
                     children: [
                       const Icon(
@@ -812,10 +828,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 4),
-
-                  // Location
                   Row(
                     children: [
                       const Icon(
@@ -836,10 +849,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 6),
-
-
                   Row(
                     children: [
                       if (product.badge.isNotEmpty)
@@ -878,14 +888,14 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: [
+                            children: const [
                               Icon(
                                 Icons.local_shipping,
                                 color: TokopediaColors.orange,
                                 size: 10,
                               ),
-                              const SizedBox(width: 2),
-                              const Text(
+                              SizedBox(width: 2),
+                              Text(
                                 'Gratis',
                                 style: TextStyle(
                                   color: TokopediaColors.orange,
