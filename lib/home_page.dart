@@ -185,7 +185,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 4.9,
       sold: 1250,
       location: 'Jakarta Pusat',
-      imageUrl: 'assets/images/produk/p.jpg', // Ganti dengan nama file Anda
+      imageUrl: 'images/produk/p.jpg', // Ganti dengan nama file Anda
       isFreeShipping: true,
       badge: 'Power Merchant',
     ),
@@ -197,7 +197,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 4.8,
       sold: 890,
       location: 'Tangerang',
-      imageUrl: 'assets/images/produk/p2.jpg',
+      imageUrl: 'images/produk/p2.jpg',
       isFreeShipping: true,
       badge: 'Official Store',
     ),
@@ -209,7 +209,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 4.7,
       sold: 2340,
       location: 'Surabaya',
-      imageUrl: 'assets/images/produk/p3.jpg',
+      imageUrl: 'images/produk/p3.jpg',
       isFreeShipping: true,
       badge: 'Top Seller',
     ),
@@ -221,7 +221,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 5.0,
       sold: 456,
       location: 'Jakarta Selatan',
-      imageUrl: 'assets/images/produk/p4.jpg',
+      imageUrl: 'images/produk/p4.jpg',
       isFreeShipping: true,
       badge: 'Official Store',
     ),
@@ -233,7 +233,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 4.9,
       sold: 3450,
       location: 'Bandung',
-      imageUrl: 'assets/images/produk/p5.jpg',
+      imageUrl: 'images/produk/p5.jpg',
       isFreeShipping: true,
       badge: 'Best Seller',
     ),
@@ -245,7 +245,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 4.8,
       sold: 5670,
       location: 'Jakarta Barat',
-      imageUrl: 'assets/images/produk/p6.jpg',
+      imageUrl: 'images/produk/p6.jpg',
       isFreeShipping: true,
       badge: 'Power Merchant',
     ),
@@ -257,7 +257,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 4.9,
       sold: 678,
       location: 'Medan',
-      imageUrl: 'assets/images/produk/p7.jpg',
+      imageUrl: 'images/produk/p7.jpg',
       isFreeShipping: true,
       badge: 'Official Store',
     ),
@@ -269,7 +269,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 4.8,
       sold: 4560,
       location: 'Semarang',
-      imageUrl: 'assets/images/produk/p1.jpg',
+      imageUrl: 'images/produk/p1.jpg',
       isFreeShipping: false,
       badge: 'Top Seller',
     ),
@@ -461,7 +461,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
             sliver: SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 0.62,
+                childAspectRatio: 0.54, // Diperkecil lagi untuk card lebih tinggi
                 crossAxisSpacing: 8,
                 mainAxisSpacing: 8,
               ),
@@ -620,7 +620,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     );
   }
 
-  /// Build Product Card - Dengan support untuk gambar dari assets
+  /// Build Product Card - Dengan gambar produk yang lebih tinggi
   Widget _buildProductCard(Product product) {
     return Container(
       decoration: BoxDecoration(
@@ -631,11 +631,11 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Product Image
+          // Product Image - Diperpanjang dari 140 ke 220
           Stack(
             children: [
               Container(
-                height: 140,
+                height: 220, // Diperpanjang lagi dari 180 menjadi 220 (+40)
                 decoration: const BoxDecoration(
                   color: TokopediaColors.searchBackground,
                   borderRadius: BorderRadius.only(
@@ -651,14 +651,14 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
                   child: Image.asset(
                     product.imageUrl,
                     width: double.infinity,
-                    height: 140,
+                    height: 220, // Sesuaikan dengan container
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       // Jika gambar tidak ditemukan, tampilkan placeholder
                       return Center(
                         child: Icon(
                           Icons.image_outlined,
-                          size: 60,
+                          size: 80, // Diperbesar dari 70 agar proporsional
                           color: TokopediaColors.textTertiary,
                         ),
                       );
