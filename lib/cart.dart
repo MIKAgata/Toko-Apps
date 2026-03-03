@@ -64,7 +64,7 @@ class _CheckInPageState extends State<CheckInPage> {
       name: 'iPhone 15 Pro Max 256GB Garansi Resmi iBox Indonesia',
       price: '18999000',
       originalPrice: '21999000',
-      imageUrl: '',
+      imageUrl: 'assets/images/produk/p.jpg',
       variant: 'Warna: Natural Titanium',
       seller: 'iBox Official Store',
       quantity: 1,
