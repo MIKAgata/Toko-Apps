@@ -523,7 +523,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     );
   }
 
-  /// Build Banner Item - Dengan support untuk gambar dari assets
+  /// Build Banner Item - Tanpa Title dan Subtitle (Hanya Gambar)
   Widget _buildBannerItem({
     required String imageUrl,
     required LinearGradient gradient,
@@ -544,67 +544,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: Stack(
-          children: [
-            // Background Image atau Gradient
-            Positioned.fill(
-              child: _buildImageOrGradient(imageUrl, gradient),
-            ),
-            // Overlay Gradient
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Colors.black.withOpacity(0.5)],
-                ),
-              ),
-            ),
-            // Text Content
-            Positioned(
-              left: 20,
-              bottom: 20,
-              right: 20,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black45,
-                          offset: Offset(1, 1),
-                          blurRadius: 3,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black45,
-                          offset: Offset(1, 1),
-                          blurRadius: 3,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        child: _buildImageOrGradient(imageUrl, gradient),
       ),
     );
   }
