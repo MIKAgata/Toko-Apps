@@ -94,6 +94,13 @@ class TokopediaColors {
   static const Color border = Color(0xFF3A3F42);
 }
 
+/// Responsive Breakpoints
+class ResponsiveBreakpoints {
+  static const double mobile = 600;
+  static const double tablet = 900;
+  static const double desktop = 1200;
+}
+
 class Product {
   final String name;
   final String price;
@@ -102,7 +109,7 @@ class Product {
   final double rating;
   final int sold;
   final String location;
-  final String imageUrl; // Path ke images/produk/nama_file.jpg
+  final String imageUrl;
   final bool isFreeShipping;
   final String badge;
 
@@ -134,7 +141,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
 
   final List<Map<String, dynamic>> _bannerData = [
     {
-      'imageUrl': 'assets/images/benner/b.jpg', // Ganti dengan nama file Anda
+      'imageUrl': 'assets/images/benner/b.jpg',
       'gradient': const LinearGradient(
         colors: [Color(0xFF42B549), Color(0xFF5BC862)],
         begin: Alignment.topLeft,
@@ -175,7 +182,6 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     },
   ];
 
-  // Product data dengan path ke images/produk/
   final List<Product> _products = [
     Product(
       name: 'iPhone 15 Pro Max 256GB Garansi Resmi iBox Indonesia',
@@ -185,7 +191,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       rating: 4.9,
       sold: 1250,
       location: 'Jakarta Pusat',
-      imageUrl: 'images/produk/p.jpg', // Ganti dengan nama file Anda
+      imageUrl: 'images/produk/p.jpg',
       isFreeShipping: true,
       badge: 'Power Merchant',
     ),
@@ -308,196 +314,301 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: TokopediaColors.background,
-      appBar: AppBar(
-        backgroundColor: TokopediaColors.cardBackground,
-        elevation: 2,
-        shadowColor: Colors.black.withOpacity(0.3),
-        title: Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: TokopediaColors.searchBackground,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: TokopediaColors.border, width: 1),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        
+        // Tentukan apakah mobile, tablet, atau desktop
+        final isMobile = width < ResponsiveBreakpoints.mobile;
+        final isTablet = width >= ResponsiveBreakpoints.mobile && 
+                        width < ResponsiveBreakpoints.desktop;
+        final isDesktop = width >= ResponsiveBreakpoints.desktop;
+
+        return Scaffold(
+          backgroundColor: TokopediaColors.background,
+          appBar: _buildAppBar(context, width),
+          body: _buildBody(isMobile, isTablet, isDesktop, width),
+        );
+      },
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar(BuildContext context, double screenWidth) {
+    final isMobile = screenWidth < ResponsiveBreakpoints.mobile;
+    
+    return AppBar(
+      backgroundColor: TokopediaColors.cardBackground,
+      elevation: 2,
+      shadowColor: Colors.black.withOpacity(0.3),
+      centerTitle: false,
+      title: Row(
+        children: [
+          // Logo (untuk desktop/tablet)
+          if (!isMobile)
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Text(
+                'Tokopedia',
+                style: TextStyle(
+                  color: TokopediaColors.primary,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
-                child: TextField(
-                  style: const TextStyle(
-                    color: TokopediaColors.textPrimary,
+              ),
+            ),
+          
+          // Search Bar
+          Expanded(
+            child: Container(
+              height: 40,
+              constraints: BoxConstraints(
+                maxWidth: isMobile ? double.infinity : 600,
+              ),
+              decoration: BoxDecoration(
+                color: TokopediaColors.searchBackground,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: TokopediaColors.border, width: 1),
+              ),
+              child: TextField(
+                style: const TextStyle(
+                  color: TokopediaColors.textPrimary,
+                  fontSize: 14,
+                ),
+                decoration: InputDecoration(
+                  hintText: 'Cari produk, kategori, brand...',
+                  hintStyle: const TextStyle(
+                    color: TokopediaColors.textSecondary,
                     fontSize: 14,
                   ),
-                  decoration: InputDecoration(
-                    hintText: 'Cari produk, kategori, brand...',
-                    hintStyle: const TextStyle(
-                      color: TokopediaColors.textSecondary,
-                      fontSize: 14,
-                    ),
-                    prefixIcon: const Icon(
-                      Icons.search,
-                      color: TokopediaColors.primary,
-                      size: 20,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 10,
-                    ),
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    color: TokopediaColors.primary,
+                    size: 20,
                   ),
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text(
-                          'Fitur pencarian dalam pengembangan',
-                          style: TextStyle(color: TokopediaColors.textPrimary),
-                        ),
-                        backgroundColor: TokopediaColors.cardBackground,
-                        duration: const Duration(seconds: 1),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                ),
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text(
+                        'Fitur pencarian dalam pengembangan',
+                        style: TextStyle(color: TokopediaColors.textPrimary),
                       ),
-                    );
-                  },
+                      backgroundColor: TokopediaColors.cardBackground,
+                      duration: const Duration(seconds: 1),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        // Cart Icon
+        Stack(
+          children: [
+            IconButton(
+              icon: const Icon(
+                Icons.shopping_cart_outlined,
+                color: TokopediaColors.textPrimary,
+                size: 24,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CheckInPage(),
+                  ),
+                );
+              },
+            ),
+            Positioned(
+              right: 8,
+              top: 8,
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: const BoxDecoration(
+                  color: TokopediaColors.red,
+                  shape: BoxShape.circle,
+                ),
+                constraints: const BoxConstraints(
+                  minWidth: 16,
+                  minHeight: 16,
+                ),
+                child: const Text(
+                  '3',
+                  style: TextStyle(
+                    color: TokopediaColors.textPrimary,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
           ],
         ),
-        actions: [
-          Stack(
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.shopping_cart_outlined,
-                  color: TokopediaColors.textPrimary,
-                  size: 24,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CheckInPage(),
-                    ),
-                  );
-                },
-              ),
-              Positioned(
-                right: 8,
-                top: 8,
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
-                    color: TokopediaColors.red,
-                    shape: BoxShape.circle,
-                  ),
-                  constraints: const BoxConstraints(
-                    minWidth: 16,
-                    minHeight: 16,
-                  ),
-                  child: const Text(
-                    '3',
-                    style: TextStyle(
-                      color: TokopediaColors.textPrimary,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ],
+        
+        // Profile Icon
+        IconButton(
+          icon: const Icon(
+            Icons.person_outline,
+            color: TokopediaColors.textPrimary,
+            size: 24,
           ),
-          IconButton(
-            icon: const Icon(
-              Icons.person_outline,
-              color: TokopediaColors.textPrimary,
-              size: 24,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProfilePage()),
-              );
-            },
-          ),
-          const SizedBox(width: 8),
-        ],
-      ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(child: _buildBannerSection()),
-          SliverToBoxAdapter(child: _buildCategoriesSection()),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Rekomendasi Untukmu',
-                    style: TextStyle(
-                      color: TokopediaColors.textPrimary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Lihat Semua',
-                      style: TextStyle(
-                        color: TokopediaColors.primary,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.54, // Diperkecil lagi untuk card lebih tinggi
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
-              ),
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return _buildProductCard(_products[index]);
-              }, childCount: _products.length),
-            ),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
-        ],
-      ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfilePage()),
+            );
+          },
+        ),
+        
+        SizedBox(width: isMobile ? 8 : 16),
+      ],
     );
   }
 
-  Widget _buildBannerSection() {
+  Widget _buildBody(bool isMobile, bool isTablet, bool isDesktop, double width) {
+    // Hitung cross axis count berdasarkan lebar layar
+    int crossAxisCount;
+    double childAspectRatio;
+    double horizontalPadding;
+    
+    if (isMobile) {
+      crossAxisCount = 2;
+      childAspectRatio = 0.54;
+      horizontalPadding = 12;
+    } else if (isTablet) {
+      crossAxisCount = 3;
+      childAspectRatio = 0.60;
+      horizontalPadding = 24;
+    } else {
+      // Desktop - batasi lebar konten
+      crossAxisCount = width > 1600 ? 6 : 5;
+      childAspectRatio = 0.65;
+      horizontalPadding = 0;
+    }
+
+    Widget content = CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(child: _buildBannerSection(isMobile, isTablet, isDesktop)),
+        SliverToBoxAdapter(child: _buildCategoriesSection(isMobile, isTablet)),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+              horizontalPadding + 16,
+              20,
+              horizontalPadding + 16,
+              12,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Rekomendasi Untukmu',
+                  style: TextStyle(
+                    color: TokopediaColors.textPrimary,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    'Lihat Semua',
+                    style: TextStyle(
+                      color: TokopediaColors.primary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SliverPadding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding + 12),
+          sliver: SliverGrid(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              childAspectRatio: childAspectRatio,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return _buildProductCard(_products[index], isMobile);
+              },
+              childCount: _products.length,
+            ),
+          ),
+        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 20)),
+      ],
+    );
+
+    // Untuk desktop, batasi lebar konten di tengah
+    if (isDesktop) {
+      return Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 1400),
+          child: content,
+        ),
+      );
+    }
+
+    return content;
+  }
+
+  Widget _buildBannerSection(bool isMobile, bool isTablet, bool isDesktop) {
+    double bannerHeight;
+    double horizontalMargin;
+    
+    if (isMobile) {
+      bannerHeight = 160;
+      horizontalMargin = 16;
+    } else if (isTablet) {
+      bannerHeight = 200;
+      horizontalMargin = 24;
+    } else {
+      bannerHeight = 280;
+      horizontalMargin = 0;
+    }
+
     return Column(
       children: [
         const SizedBox(height: 16),
-        SizedBox(
-          height: 160,
-          child: PageView.builder(
-            controller: _bannerController,
-            onPageChanged: (index) {
-              setState(() {
-                _currentBannerIndex = index;
-              });
-            },
-            itemCount: _bannerData.length,
-            itemBuilder: (context, index) {
-              return _buildBannerItem(
-                imageUrl: _bannerData[index]['imageUrl'] as String,
-                gradient: _bannerData[index]['gradient'] as LinearGradient,
-                title: _bannerData[index]['title'] as String,
-                subtitle: _bannerData[index]['subtitle'] as String,
-              );
-            },
+        Container(
+          constraints: isDesktop 
+              ? const BoxConstraints(maxWidth: 1400) 
+              : null,
+          child: SizedBox(
+            height: bannerHeight,
+            child: PageView.builder(
+              controller: _bannerController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentBannerIndex = index;
+                });
+              },
+              itemCount: _bannerData.length,
+              itemBuilder: (context, index) {
+                return _buildBannerItem(
+                  imageUrl: _bannerData[index]['imageUrl'] as String,
+                  gradient: _bannerData[index]['gradient'] as LinearGradient,
+                  title: _bannerData[index]['title'] as String,
+                  subtitle: _bannerData[index]['subtitle'] as String,
+                  horizontalMargin: horizontalMargin,
+                );
+              },
+            ),
           ),
         ),
         const SizedBox(height: 12),
@@ -523,15 +634,15 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     );
   }
 
-  /// Build Banner Item - Tanpa Title dan Subtitle (Hanya Gambar)
   Widget _buildBannerItem({
     required String imageUrl,
     required LinearGradient gradient,
     required String title,
     required String subtitle,
+    required double horizontalMargin,
   }) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
@@ -549,13 +660,11 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     );
   }
 
-  /// Helper untuk menampilkan Image atau Gradient
   Widget _buildImageOrGradient(String imageUrl, LinearGradient gradient) {
     return Image.asset(
       imageUrl,
       fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) {
-        // Jika gambar tidak ditemukan, tampilkan gradient
         return Container(
           decoration: BoxDecoration(gradient: gradient),
         );
@@ -563,7 +672,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     );
   }
 
-  Widget _buildCategoriesSection() {
+  Widget _buildCategoriesSection(bool isMobile, bool isTablet) {
     final categories = [
       {
         'icon': Icons.flash_on,
@@ -583,17 +692,20 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       {'icon': Icons.stars, 'label': 'Top Up', 'color': Colors.blue},
     ];
 
+    double iconSize = isMobile ? 56 : (isTablet ? 64 : 72);
+    double iconInnerSize = isMobile ? 28 : (isTablet ? 32 : 36);
+
     return Container(
       color: TokopediaColors.cardBackground,
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: EdgeInsets.symmetric(vertical: isMobile ? 16 : 24),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: categories.map((cat) {
           return Column(
             children: [
               Container(
-                width: 56,
-                height: 56,
+                width: iconSize,
+                height: iconSize,
                 decoration: BoxDecoration(
                   color: (cat['color'] as Color).withOpacity(0.15),
                   borderRadius: BorderRadius.circular(12),
@@ -601,15 +713,15 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
                 child: Icon(
                   cat['icon'] as IconData,
                   color: cat['color'] as Color,
-                  size: 28,
+                  size: iconInnerSize,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 cat['label'] as String,
-                style: const TextStyle(
+                style: TextStyle(
                   color: TokopediaColors.textPrimary,
-                  fontSize: 12,
+                  fontSize: isMobile ? 12 : 14,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -620,8 +732,9 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     );
   }
 
-  /// Build Product Card - Dengan gambar produk yang lebih tinggi
-  Widget _buildProductCard(Product product) {
+  Widget _buildProductCard(Product product, bool isMobile) {
+    double imageHeight = isMobile ? 220 : 240;
+    
     return Container(
       decoration: BoxDecoration(
         color: TokopediaColors.cardBackground,
@@ -631,11 +744,11 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Product Image - Diperpanjang dari 140 ke 220
+          // Product Image
           Stack(
             children: [
               Container(
-                height: 220, // Diperpanjang lagi dari 180 menjadi 220 (+40)
+                height: imageHeight,
                 decoration: const BoxDecoration(
                   color: TokopediaColors.searchBackground,
                   borderRadius: BorderRadius.only(
@@ -651,14 +764,13 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
                   child: Image.asset(
                     product.imageUrl,
                     width: double.infinity,
-                    height: 220, // Sesuaikan dengan container
+                    height: imageHeight,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                      // Jika gambar tidak ditemukan, tampilkan placeholder
                       return Center(
                         child: Icon(
                           Icons.image_outlined,
-                          size: 80, // Diperbesar dari 70 agar proporsional
+                          size: 80,
                           color: TokopediaColors.textTertiary,
                         ),
                       );
