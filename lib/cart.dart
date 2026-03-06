@@ -386,7 +386,7 @@ class _CheckInPageState extends State<CheckInPage> {
                   ),
                 ),
 
-                // Product Image
+                // Product Image dengan support untuk assets
                 Container(
                   width: 80,
                   height: 80,
@@ -398,11 +398,23 @@ class _CheckInPageState extends State<CheckInPage> {
                       width: 1,
                     ),
                   ),
-                  child: Center(
-                    child: Icon(
-                      Icons.image_outlined,
-                      size: 40,
-                      color: TokopediaColors.textTertiary,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      item.imageUrl,
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        // Jika gambar tidak ditemukan, tampilkan placeholder
+                        return Center(
+                          child: Icon(
+                            Icons.image_outlined,
+                            size: 40,
+                            color: TokopediaColors.textTertiary,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
