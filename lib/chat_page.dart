@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart';
+// import 'home_page.dart';
 import 'setting.dart';
 
 class TokopediaColors {
@@ -140,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
-        final isMobile = width < 600;
+        // final isMobile = width < 600;
         final isTablet = width >= 600 && width < 1024;
         final isDesktop = width >= 1024;
 
