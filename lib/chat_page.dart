@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'setting.dart';
 
-
 class TokopediaColors {
   static const Color primary = Color(0xFF42B549);
   static const Color primaryLight = Color(0xFF5BC862);
@@ -17,8 +16,11 @@ class TokopediaColors {
   static const Color yellow = Color(0xFFFFCC00);
   static const Color divider = Color(0xFF2D3134);
   static const Color border = Color(0xFF3A3F42);
+  
+  // WhatsApp-like colors
+  static const Color chatBubbleReceived = Color(0xFF1F2C33);
+  static const Color chatBubbleSent = Color(0xFF005C4B);
 }
-
 
 class ChatMessage {
   final String id;
@@ -55,10 +57,9 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _searchController = TextEditingController();
-
+  ChatMessage? _selectedChat;
 
   final List<ChatMessage> _chats = [
     ChatMessage(
@@ -91,7 +92,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       id: '3',
       sellerName: 'Gadget Store Jakarta',
       sellerAvatar: '',
-      lastMessage: 'Anda: Oke siap, terima kasih infonya',
+      lastMessage: 'Oke siap, terima kasih infonya',
       timestamp: '2 hari lalu',
       unreadCount: 0,
       isOnline: false,
@@ -129,256 +130,343 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   ];
 
   @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
-
-  @override
   void dispose() {
-    _tabController.dispose();
     _searchController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        final isMobile = width < 600;
+        final isTablet = width >= 600 && width < 1024;
+        final isDesktop = width >= 1024;
+
+        if (isDesktop) {
+          return _buildDesktopLayout();
+        } else if (isTablet) {
+          return _buildTabletLayout();
+        } else {
+          return _buildMobileLayout();
+        }
+      },
+    );
+  }
+
+  /// Mobile Layout (WhatsApp Mobile)
+  Widget _buildMobileLayout() {
+    if (_selectedChat != null) {
+      return ChatDetailPage(
+        chat: _selectedChat!,
+        onBack: () {
+          setState(() {
+            _selectedChat = null;
+          });
+        },
+      );
+    }
+
     int totalUnread = _chats.fold(0, (sum, chat) => sum + chat.unreadCount);
 
     return Scaffold(
       backgroundColor: TokopediaColors.background,
       appBar: AppBar(
         backgroundColor: TokopediaColors.cardBackground,
-        elevation: 2,
-        shadowColor: Colors.black.withOpacity(0.3),
+        elevation: 1,
         title: const Text(
-          'Chat',
+          'Chats',
           style: TextStyle(
             color: TokopediaColors.textPrimary,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
           ),
         ),
         actions: [
-          // Notification Bell
           IconButton(
-            icon: Badge(
-              label: Text('$totalUnread'),
-              backgroundColor: TokopediaColors.red,
-              isLabelVisible: totalUnread > 0,
-              child: const Icon(
-                Icons.notifications_outlined,
-                color: TokopediaColors.textPrimary,
-              ),
-            ),
+            icon: const Icon(Icons.camera_alt_outlined, color: TokopediaColors.textPrimary),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.search, color: TokopediaColors.textPrimary),
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Notifikasi'),
-                  backgroundColor: TokopediaColors.cardBackground,
-                  duration: Duration(seconds: 1),
-                ),
-              );
+              // Show search
             },
           ),
-          // Settings
-          IconButton(
-            icon: const Icon(
-              Icons.settings_outlined,
-              color: TokopediaColors.textPrimary,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Settingpage()),
-              );
+          PopupMenuButton(
+            icon: const Icon(Icons.more_vert, color: TokopediaColors.textPrimary),
+            color: TokopediaColors.cardBackground,
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'settings',
+                child: Text('Settings', style: TextStyle(color: TokopediaColors.textPrimary)),
+              ),
+            ],
+            onSelected: (value) {
+              if (value == 'settings') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Settingpage()),
+                );
+              }
             },
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(104),
-          child: Column(
+      ),
+      body: _buildChatList(isMobile: true),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: TokopediaColors.primary,
+        child: const Icon(Icons.chat, color: Colors.white),
+      ),
+    );
+  }
+
+  /// Tablet Layout (WhatsApp iPad - Split View)
+  Widget _buildTabletLayout() {
+    return Scaffold(
+      backgroundColor: TokopediaColors.background,
+      body: Row(
+        children: [
+          // Chat List - 40% width
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.4,
+            child: Column(
+              children: [
+                _buildTabletAppBar(),
+                Expanded(child: _buildChatList(isTablet: true)),
+              ],
+            ),
+          ),
+          
+          // Divider
+          Container(width: 1, color: TokopediaColors.divider),
+          
+          // Chat Detail - 60% width
+          Expanded(
+            child: _selectedChat != null
+                ? ChatDetailPage(chat: _selectedChat!, isTablet: true)
+                : _buildEmptyChatArea(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Desktop Layout (WhatsApp Web)
+  Widget _buildDesktopLayout() {
+    return Scaffold(
+      backgroundColor: TokopediaColors.background,
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 1600),
+          child: Row(
             children: [
-              // Search Bar
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                child: Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: TokopediaColors.searchBackground,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: TokopediaColors.border,
-                      width: 1,
-                    ),
-                  ),
-                  child: TextField(
-                    controller: _searchController,
-                    style: const TextStyle(
-                      color: TokopediaColors.textPrimary,
-                      fontSize: 14,
-                    ),
-                    decoration: const InputDecoration(
-                      hintText: 'Cari chat...',
-                      hintStyle: TextStyle(
-                        color: TokopediaColors.textSecondary,
-                        fontSize: 14,
-                      ),
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: TokopediaColors.textSecondary,
-                        size: 20,
-                      ),
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                    ),
+              // Sidebar - Chat List
+              Container(
+                width: 420,
+                decoration: BoxDecoration(
+                  color: TokopediaColors.cardBackground,
+                  border: Border(
+                    right: BorderSide(color: TokopediaColors.divider, width: 1),
                   ),
                 ),
-              ),
-
-              // Tab Bar
-              Container(
-                color: TokopediaColors.cardBackground,
-                child: TabBar(
-                  controller: _tabController,
-                  indicatorColor: TokopediaColors.primary,
-                  indicatorWeight: 3,
-                  labelColor: TokopediaColors.primary,
-                  unselectedLabelColor: TokopediaColors.textSecondary,
-                  labelStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  unselectedLabelStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  tabs: [
-                    Tab(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('Chat'),
-                          if (totalUnread > 0) ...[
-                            const SizedBox(width: 6),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: TokopediaColors.red,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                '$totalUnread',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                    const Tab(text: 'Diskusi'),
+                child: Column(
+                  children: [
+                    _buildDesktopAppBar(),
+                    _buildSearchBar(),
+                    Expanded(child: _buildChatList(isDesktop: true)),
                   ],
                 ),
+              ),
+              
+              // Main Chat Area
+              Expanded(
+                child: _selectedChat != null
+                    ? ChatDetailPage(chat: _selectedChat!, isDesktop: true)
+                    : _buildEmptyChatArea(),
               ),
             ],
           ),
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
+    );
+  }
+
+  Widget _buildTabletAppBar() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: TokopediaColors.cardBackground,
+        border: Border(bottom: BorderSide(color: TokopediaColors.divider)),
+      ),
+      child: Row(
         children: [
-          // Chat Tab
-          _buildChatList(),
-          // Diskusi Tab
-          _buildDiskusiList(),
+          const Text(
+            'Chats',
+            style: TextStyle(
+              color: TokopediaColors.textPrimary,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const Spacer(),
+          IconButton(
+            icon: const Icon(Icons.more_vert, color: TokopediaColors.textPrimary),
+            onPressed: () {},
+          ),
         ],
       ),
     );
   }
 
-  /// Build Chat List
-  Widget _buildChatList() {
+  Widget _buildDesktopAppBar() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: TokopediaColors.cardBackground,
+        border: Border(bottom: BorderSide(color: TokopediaColors.divider)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: TokopediaColors.primary,
+              shape: BoxShape.circle,
+            ),
+            child: const Center(
+              child: Icon(Icons.person, color: Colors.white, size: 24),
+            ),
+          ),
+          const Spacer(),
+          IconButton(
+            icon: const Icon(Icons.donut_large, color: TokopediaColors.textSecondary),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.chat, color: TokopediaColors.textSecondary),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.more_vert, color: TokopediaColors.textSecondary),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchBar() {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: TokopediaColors.cardBackground,
+        border: Border(bottom: BorderSide(color: TokopediaColors.divider)),
+      ),
+      child: Container(
+        height: 36,
+        decoration: BoxDecoration(
+          color: TokopediaColors.searchBackground,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: TextField(
+          controller: _searchController,
+          style: const TextStyle(color: TokopediaColors.textPrimary, fontSize: 14),
+          decoration: const InputDecoration(
+            hintText: 'Search or start new chat',
+            hintStyle: TextStyle(color: TokopediaColors.textSecondary, fontSize: 14),
+            prefixIcon: Icon(Icons.search, color: TokopediaColors.textSecondary, size: 20),
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(vertical: 8),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChatList({
+    bool isMobile = false,
+    bool isTablet = false,
+    bool isDesktop = false,
+  }) {
     if (_chats.isEmpty) {
-      return _buildEmptyState(
-        icon: Icons.chat_bubble_outline,
-        title: 'Belum ada chat',
-        subtitle: 'Chat dengan penjual akan muncul di sini',
-      );
+      return _buildEmptyState();
     }
 
     return ListView.builder(
       itemCount: _chats.length,
       itemBuilder: (context, index) {
-        return _buildChatItem(_chats[index]);
+        final chat = _chats[index];
+        final isSelected = _selectedChat?.id == chat.id;
+        
+        return _buildChatItem(
+          chat,
+          isSelected: isSelected,
+          isMobile: isMobile,
+          isTablet: isTablet,
+          isDesktop: isDesktop,
+        );
       },
     );
   }
 
-  /// Build Chat Item
-  Widget _buildChatItem(ChatMessage chat) {
+  Widget _buildChatItem(
+    ChatMessage chat, {
+    bool isSelected = false,
+    bool isMobile = false,
+    bool isTablet = false,
+    bool isDesktop = false,
+  }) {
     bool isFromUser = chat.lastMessage.startsWith('Anda:');
 
     return InkWell(
-      onTap: () => _openChatDetail(chat),
-      onLongPress: () => _showChatOptions(chat),
+      onTap: () {
+        setState(() {
+          _selectedChat = chat;
+        });
+      },
       child: Container(
-        color: TokopediaColors.cardBackground,
-        margin: const EdgeInsets.only(bottom: 1),
+        color: isSelected ? TokopediaColors.searchBackground : TokopediaColors.cardBackground,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Avatar
             Stack(
               children: [
                 Container(
-                  width: 48,
-                  height: 48,
+                  width: 52,
+                  height: 52,
                   decoration: BoxDecoration(
-                    color: TokopediaColors.searchBackground,
+                    color: TokopediaColors.primary,
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: chat.isOnline
-                          ? TokopediaColors.primary
-                          : TokopediaColors.border,
-                      width: 2,
-                    ),
                   ),
                   child: Center(
                     child: Text(
                       chat.sellerName[0].toUpperCase(),
                       style: const TextStyle(
-                        color: TokopediaColors.textPrimary,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                 ),
-                // Online Indicator
                 if (chat.isOnline)
                   Positioned(
                     bottom: 0,
                     right: 0,
                     child: Container(
-                      width: 14,
-                      height: 14,
+                      width: 16,
+                      height: 16,
                       decoration: BoxDecoration(
                         color: TokopediaColors.primary,
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: TokopediaColors.cardBackground,
-                          width: 2,
+                          width: 3,
                         ),
                       ),
                     ),
@@ -388,76 +476,39 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
 
             const SizedBox(width: 12),
 
-            // Chat Content
+            // Chat Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Seller Name & Badge
                   Row(
                     children: [
                       Expanded(
-                        child: Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                chat.sellerName,
-                                style: const TextStyle(
-                                  color: TokopediaColors.textPrimary,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            if (chat.isOfficial) ...[
-                              const SizedBox(width: 6),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: TokopediaColors.primary.withOpacity(0.15),
-                                  borderRadius: BorderRadius.circular(3),
-                                  border: Border.all(
-                                    color: TokopediaColors.primary.withOpacity(0.3),
-                                    width: 0.5,
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Official',
-                                  style: TextStyle(
-                                    color: TokopediaColors.primary,
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ],
+                        child: Text(
+                          chat.sellerName,
+                          style: TextStyle(
+                            color: TokopediaColors.textPrimary,
+                            fontSize: 16,
+                            fontWeight: chat.unreadCount > 0 
+                                ? FontWeight.w600 
+                                : FontWeight.w500,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       const SizedBox(width: 8),
-                      // Timestamp
                       Text(
                         chat.timestamp,
                         style: TextStyle(
                           color: chat.unreadCount > 0
                               ? TokopediaColors.primary
                               : TokopediaColors.textTertiary,
-                          fontSize: 11,
-                          fontWeight: chat.unreadCount > 0
-                              ? FontWeight.w600
-                              : FontWeight.normal,
+                          fontSize: 12,
                         ),
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 4),
-
-                  // Last Message
                   Row(
                     children: [
                       if (isFromUser)
@@ -478,102 +529,38 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                             color: chat.unreadCount > 0
                                 ? TokopediaColors.textPrimary
                                 : TokopediaColors.textSecondary,
-                            fontSize: 13,
-                            fontWeight: chat.unreadCount > 0
-                                ? FontWeight.w500
-                                : FontWeight.normal,
+                            fontSize: 14,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      // Unread Badge
                       if (chat.unreadCount > 0) ...[
                         const SizedBox(width: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 7,
-                            vertical: 3,
+                            horizontal: 8,
+                            vertical: 2,
                           ),
                           decoration: const BoxDecoration(
-                            color: TokopediaColors.red,
+                            color: TokopediaColors.primary,
                             shape: BoxShape.circle,
                           ),
-                          child: Text(
-                            chat.unreadCount > 99
-                                ? '99+'
-                                : '${chat.unreadCount}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
+                          constraints: const BoxConstraints(minWidth: 20, minHeight: 20),
+                          child: Center(
+                            child: Text(
+                              chat.unreadCount > 99 ? '99+' : '${chat.unreadCount}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ],
                   ),
-
-                  const SizedBox(height: 8),
-
-                  // Product Info
-                  if (chat.productName.isNotEmpty)
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: TokopediaColors.searchBackground,
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: TokopediaColors.border,
-                          width: 0.5,
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          // Product Image
-                          Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              color: TokopediaColors.background,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: const Icon(
-                              Icons.image_outlined,
-                              size: 20,
-                              color: TokopediaColors.textTertiary,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          // Product Details
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  chat.productName,
-                                  style: const TextStyle(
-                                    color: TokopediaColors.textPrimary,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  chat.productPrice,
-                                  style: const TextStyle(
-                                    color: TokopediaColors.textSecondary,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                 ],
               ),
             ),
@@ -583,257 +570,77 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
     );
   }
 
-  /// Build Diskusi List
-  Widget _buildDiskusiList() {
-    return _buildEmptyState(
-      icon: Icons.forum_outlined,
-      title: 'Belum ada diskusi',
-      subtitle: 'Diskusi produk akan muncul di sini',
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.chat_bubble_outline,
+            size: 100,
+            color: TokopediaColors.textTertiary,
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            'No chats yet',
+            style: TextStyle(
+              color: TokopediaColors.textPrimary,
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Start chatting with sellers',
+            style: TextStyle(
+              color: TokopediaColors.textSecondary,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  /// Build Empty State
-  Widget _buildEmptyState({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-  }) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
+  Widget _buildEmptyChatArea() {
+    return Container(
+      color: TokopediaColors.background,
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 120,
-              height: 120,
+              width: 280,
+              height: 280,
               decoration: BoxDecoration(
                 color: TokopediaColors.cardBackground,
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                icon,
-                size: 60,
+                Icons.chat_bubble_outline,
+                size: 120,
                 color: TokopediaColors.textTertiary,
               ),
             ),
-            const SizedBox(height: 24),
-            Text(
-              title,
-              style: const TextStyle(
+            const SizedBox(height: 32),
+            const Text(
+              'Tokopedia Chat for Desktop',
+              style: TextStyle(
                 color: TokopediaColors.textPrimary,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+                fontSize: 32,
+                fontWeight: FontWeight.w300,
               ),
-              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
-            Text(
-              subtitle,
-              style: const TextStyle(
+            const SizedBox(height: 16),
+            const Text(
+              'Send and receive messages with sellers',
+              style: TextStyle(
                 color: TokopediaColors.textSecondary,
                 fontSize: 14,
               ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: TokopediaColors.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 14,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                elevation: 0,
-              ),
-              child: const Text(
-                'Belanja Sekarang',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  /// Open Chat Detail
-  void _openChatDetail(ChatMessage chat) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ChatDetailPage(chat: chat),
-      ),
-    );
-  }
-
-  /// Show Chat Options
-  void _showChatOptions(ChatMessage chat) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: TokopediaColors.cardBackground,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 12),
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: TokopediaColors.divider,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 20),
-            _buildBottomSheetItem(
-              icon: Icons.notifications_off_outlined,
-              title: 'Matikan Notifikasi',
-              onTap: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Notifikasi dimatikan'),
-                    backgroundColor: TokopediaColors.cardBackground,
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-              },
-            ),
-            _buildBottomSheetItem(
-              icon: Icons.push_pin_outlined,
-              title: 'Pin Chat',
-              onTap: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Chat di-pin'),
-                    backgroundColor: TokopediaColors.cardBackground,
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-              },
-            ),
-            _buildBottomSheetItem(
-              icon: Icons.delete_outline,
-              title: 'Hapus Chat',
-              titleColor: TokopediaColors.red,
-              onTap: () {
-                Navigator.pop(context);
-                _showDeleteConfirmation(chat);
-              },
-            ),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBottomSheetItem({
-    required IconData icon,
-    required String title,
-    required VoidCallback onTap,
-    Color? titleColor,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: titleColor ?? TokopediaColors.textPrimary,
-              size: 24,
-            ),
-            const SizedBox(width: 16),
-            Text(
-              title,
-              style: TextStyle(
-                color: titleColor ?? TokopediaColors.textPrimary,
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// Show Delete Confirmation
-  void _showDeleteConfirmation(ChatMessage chat) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: TokopediaColors.cardBackground,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        title: const Text(
-          'Hapus Chat',
-          style: TextStyle(
-            color: TokopediaColors.textPrimary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: Text(
-          'Apakah Anda yakin ingin menghapus chat dengan ${chat.sellerName}?',
-          style: const TextStyle(
-            color: TokopediaColors.textSecondary,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'BATAL',
-              style: TextStyle(
-                color: TokopediaColors.textSecondary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _chats.remove(chat);
-              });
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Chat berhasil dihapus'),
-                  backgroundColor: TokopediaColors.primary,
-                  duration: Duration(seconds: 2),
-                ),
-              );
-            },
-            child: const Text(
-              'HAPUS',
-              style: TextStyle(
-                color: TokopediaColors.red,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -842,8 +649,17 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
 /// Chat Detail Page
 class ChatDetailPage extends StatefulWidget {
   final ChatMessage chat;
+  final VoidCallback? onBack;
+  final bool isTablet;
+  final bool isDesktop;
 
-  const ChatDetailPage({super.key, required this.chat});
+  const ChatDetailPage({
+    super.key,
+    required this.chat,
+    this.onBack,
+    this.isTablet = false,
+    this.isDesktop = false,
+  });
 
   @override
   State<ChatDetailPage> createState() => _ChatDetailPageState();
@@ -851,12 +667,12 @@ class ChatDetailPage extends StatefulWidget {
 
 class _ChatDetailPageState extends State<ChatDetailPage> {
   final TextEditingController _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   final List<Map<String, dynamic>> _messages = [];
 
   @override
   void initState() {
     super.initState();
-    // Add dummy messages
     _messages.addAll([
       {
         'text': 'Halo kak, ada yang bisa dibantu?',
@@ -880,35 +696,70 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: TokopediaColors.background,
-      appBar: AppBar(
-        backgroundColor: TokopediaColors.cardBackground,
-        elevation: 2,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: TokopediaColors.textPrimary),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Row(
+      appBar: _buildAppBar(),
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(
+                    'https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png',
+                  ),
+                  opacity: 0.05,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: ListView.builder(
+                controller: _scrollController,
+                padding: const EdgeInsets.all(16),
+                itemCount: _messages.length,
+                itemBuilder: (context, index) {
+                  final message = _messages[index];
+                  return _buildMessageBubble(
+                    message['text'],
+                    message['isFromUser'],
+                    message['time'],
+                  );
+                },
+              ),
+            ),
+          ),
+          _buildInputArea(),
+        ],
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      backgroundColor: TokopediaColors.cardBackground,
+      elevation: 1,
+      leading: widget.isTablet || widget.isDesktop
+          ? null
+          : IconButton(
+              icon: const Icon(Icons.arrow_back, color: TokopediaColors.textPrimary),
+              onPressed: widget.onBack ?? () => Navigator.pop(context),
+            ),
+      automaticallyImplyLeading: !widget.isTablet && !widget.isDesktop,
+      title: InkWell(
+        onTap: () {},
+        child: Row(
           children: [
             Container(
-              width: 36,
-              height: 36,
+              width: 40,
+              height: 40,
               decoration: BoxDecoration(
-                color: TokopediaColors.searchBackground,
+                color: TokopediaColors.primary,
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: widget.chat.isOnline
-                      ? TokopediaColors.primary
-                      : TokopediaColors.border,
-                  width: 2,
-                ),
               ),
               child: Center(
                 child: Text(
                   widget.chat.sellerName[0].toUpperCase(),
                   style: const TextStyle(
-                    color: TokopediaColors.textPrimary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
@@ -918,36 +769,22 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Flexible(
-                        child: Text(
-                          widget.chat.sellerName,
-                          style: const TextStyle(
-                            color: TokopediaColors.textPrimary,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      if (widget.chat.isOfficial) ...[
-                        const SizedBox(width: 6),
-                        const Icon(
-                          Icons.verified,
-                          color: TokopediaColors.primary,
-                          size: 14,
-                        ),
-                      ],
-                    ],
+                  Text(
+                    widget.chat.sellerName,
+                    style: const TextStyle(
+                      color: TokopediaColors.textPrimary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    widget.chat.isOnline ? 'Online' : 'Offline',
+                    widget.chat.isOnline ? 'online' : 'offline',
                     style: TextStyle(
                       color: widget.chat.isOnline
                           ? TokopediaColors.primary
                           : TokopediaColors.textSecondary,
-                      fontSize: 11,
+                      fontSize: 12,
                     ),
                   ),
                 ],
@@ -955,176 +792,152 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: TokopediaColors.textPrimary),
-            onPressed: () {},
-          ),
-        ],
       ),
-      body: Column(
-        children: [
-          // Messages
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final message = _messages[index];
-                return _buildMessageBubble(
-                  message['text'],
-                  message['isFromUser'],
-                  message['time'],
-                );
-              },
-            ),
-          ),
-
-          // Input Area
-          Container(
-            decoration: BoxDecoration(
-              color: TokopediaColors.cardBackground,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, -2),
-                ),
-              ],
-            ),
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.add_circle_outline,
-                        color: TokopediaColors.textSecondary,
-                      ),
-                      onPressed: () {},
-                    ),
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        decoration: BoxDecoration(
-                          color: TokopediaColors.searchBackground,
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        child: TextField(
-                          controller: _messageController,
-                          style: const TextStyle(
-                            color: TokopediaColors.textPrimary,
-                          ),
-                          decoration: const InputDecoration(
-                            hintText: 'Tulis pesan...',
-                            hintStyle: TextStyle(
-                              color: TokopediaColors.textSecondary,
-                            ),
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.send,
-                        color: TokopediaColors.primary,
-                      ),
-                      onPressed: () {
-                        if (_messageController.text.isNotEmpty) {
-                          setState(() {
-                            _messages.add({
-                              'text': _messageController.text,
-                              'isFromUser': true,
-                              'time': 'Baru saja',
-                            });
-                            _messageController.clear();
-                          });
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.videocam, color: TokopediaColors.textPrimary),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: const Icon(Icons.call, color: TokopediaColors.textPrimary),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: const Icon(Icons.more_vert, color: TokopediaColors.textPrimary),
+          onPressed: () {},
+        ),
+      ],
     );
   }
 
   Widget _buildMessageBubble(String text, bool isFromUser, String time) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        mainAxisAlignment:
-            isFromUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          if (!isFromUser) ...[
-            Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                color: TokopediaColors.searchBackground,
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Text(
-                  widget.chat.sellerName[0].toUpperCase(),
-                  style: const TextStyle(
-                    color: TokopediaColors.textPrimary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+    return Align(
+      alignment: isFromUser ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.75,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: isFromUser
+              ? TokopediaColors.chatBubbleSent
+              : TokopediaColors.chatBubbleReceived,
+          borderRadius: BorderRadius.only(
+            topLeft: const Radius.circular(8),
+            topRight: const Radius.circular(8),
+            bottomLeft: Radius.circular(isFromUser ? 8 : 0),
+            bottomRight: Radius.circular(isFromUser ? 0 : 8),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              text,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
               ),
             ),
-            const SizedBox(width: 8),
-          ],
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: isFromUser
-                    ? TokopediaColors.primary
-                    : TokopediaColors.cardBackground,
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(16),
-                  topRight: const Radius.circular(16),
-                  bottomLeft: Radius.circular(isFromUser ? 16 : 4),
-                  bottomRight: Radius.circular(isFromUser ? 4 : 16),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    text,
-                    style: TextStyle(
-                      color: isFromUser
-                          ? Colors.white
-                          : TokopediaColors.textPrimary,
-                      fontSize: 14,
-                    ),
+            const SizedBox(height: 4),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  time,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.6),
+                    fontSize: 11,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    time,
-                    style: TextStyle(
-                      color: isFromUser
-                          ? Colors.white.withOpacity(0.7)
-                          : TokopediaColors.textTertiary,
-                      fontSize: 10,
-                    ),
+                ),
+                if (isFromUser) ...[
+                  const SizedBox(width: 4),
+                  Icon(
+                    Icons.done_all,
+                    size: 16,
+                    color: TokopediaColors.primary,
                   ),
                 ],
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInputArea() {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: TokopediaColors.cardBackground,
+        border: Border(
+          top: BorderSide(color: TokopediaColors.divider, width: 1),
+        ),
+      ),
+      child: SafeArea(
+        child: Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.emoji_emotions_outlined, color: TokopediaColors.textSecondary),
+              onPressed: () {},
+            ),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: TokopediaColors.searchBackground,
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: TextField(
+                  controller: _messageController,
+                  style: const TextStyle(color: TokopediaColors.textPrimary),
+                  decoration: const InputDecoration(
+                    hintText: 'Type a message',
+                    hintStyle: TextStyle(color: TokopediaColors.textSecondary),
+                    border: InputBorder.none,
+                  ),
+                  maxLines: null,
+                ),
               ),
             ),
-          ),
-          if (isFromUser) const SizedBox(width: 8),
-        ],
+            IconButton(
+              icon: const Icon(Icons.attach_file, color: TokopediaColors.textSecondary),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: const Icon(Icons.camera_alt, color: TokopediaColors.textSecondary),
+              onPressed: () {},
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                color: TokopediaColors.primary,
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.send, color: Colors.white, size: 20),
+                onPressed: () {
+                  if (_messageController.text.isNotEmpty) {
+                    setState(() {
+                      _messages.add({
+                        'text': _messageController.text,
+                        'isFromUser': true,
+                        'time': TimeOfDay.now().format(context),
+                      });
+                      _messageController.clear();
+                    });
+                    _scrollController.animateTo(
+                      _scrollController.position.maxScrollExtent + 100,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
