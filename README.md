@@ -1,8 +1,5 @@
-# Projek kecil membuat toko
-
-
-
-dalam tahap pengembangan
+# ZERO SHOP
+web marketplace yang di peruntukkan barang barang gadget terutama untuk tools hacking
 <!-- A new Flutter project.
 
 ## Getting Started
