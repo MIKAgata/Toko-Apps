@@ -253,7 +253,6 @@ class _CheckInPageState extends State<CheckInPage> {
     );
   }
 
-  /// Build Select All Section
   Widget _buildSelectAllSection() {
     return Container(
       color: TokopediaColors.cardBackground,
