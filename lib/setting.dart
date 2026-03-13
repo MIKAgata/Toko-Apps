@@ -311,7 +311,7 @@ class Settingpage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Username',
+                  'MIK',
                   style: TextStyle(
                     color: TokopediaColors.textPrimary,
                     fontSize: 18,
@@ -358,7 +358,7 @@ class Settingpage extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 const Text(
-                  'user@email.com',
+                  'mik@email.com',
                   style: TextStyle(
                     color: TokopediaColors.textSecondary,
                     fontSize: 13,
