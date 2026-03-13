@@ -184,9 +184,9 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
 
   final List<Product> _products = [
     Product(
-      name: 'iPhone 15 Pro Max 256GB Garansi Resmi iBox Indonesia',
-      price: 'Rp18.999.000',
-      originalPrice: 'Rp21.999.000',
+      name: 'ROG ZEPHYRUS',
+      price: 'Rp32.999.000',
+      originalPrice: 'Rp41.999.000',
       discount: '13%',
       rating: 4.9,
       sold: 1250,
@@ -196,7 +196,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       badge: 'Power Merchant',
     ),
     Product(
-      name: 'Samsung Galaxy S24 Ultra 12/256GB Garansi Resmi SEIN',
+      name: 'ROG TRIX SCAR 17 SE',
       price: 'Rp15.499.000',
       originalPrice: 'Rp17.999.000',
       discount: '14%',
