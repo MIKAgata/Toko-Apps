@@ -17,7 +17,7 @@ class TokopediaColors {
   static const Color divider = Color(0xFF2D3134);
   static const Color border = Color(0xFF3A3F42);
   
-  // WhatsApp-like colors
+
   static const Color chatBubbleReceived = Color(0xFF1F2C33);
   static const Color chatBubbleSent = Color(0xFF005C4B);
 }
