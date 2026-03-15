@@ -377,7 +377,6 @@ class Settingpage extends StatelessWidget {
     );
   }
 
-  /// Build Quick Access Grid
   Widget _buildQuickAccessGrid(BuildContext context) {
     final quickAccess = [
       {
@@ -471,7 +470,6 @@ class Settingpage extends StatelessWidget {
     );
   }
 
-  /// Build Section Title
   Widget _buildSectionTitle(String title) {
     return Container(
       color: TokopediaColors.background,
@@ -488,7 +486,6 @@ class Settingpage extends StatelessWidget {
     );
   }
 
-  /// Build Setting Item
   Widget _buildSettingItem({
     required IconData icon,
     required String title,
@@ -558,7 +555,6 @@ class Settingpage extends StatelessWidget {
     );
   }
 
-  /// Build Divider
   Widget _buildDivider() {
     return Container(
       color: TokopediaColors.cardBackground,
@@ -571,7 +567,6 @@ class Settingpage extends StatelessWidget {
     );
   }
 
-  /// Show Coming Soon
   void _showComingSoon(BuildContext context, String feature) {
     showDialog(
       context: context,
@@ -609,7 +604,6 @@ class Settingpage extends StatelessWidget {
     );
   }
 
-  /// Show About Dialog
   void _showAboutDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -701,7 +695,6 @@ class Settingpage extends StatelessWidget {
     );
   }
 
-  /// Show Logout Dialog
   void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -727,7 +720,7 @@ class Settingpage extends StatelessWidget {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: const Text(
-              'BATAL',
+              'CANCEL',
               style: TextStyle(
                 color: TokopediaColors.textSecondary,
                 fontWeight: FontWeight.bold,
