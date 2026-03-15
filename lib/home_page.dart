@@ -208,8 +208,8 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       badge: 'Official Store',
     ),
     Product(
-      name: 'Xiaomi 14 Pro 5G 12/512GB Snapdragon 8 Gen 3',
-      price: 'Rp8.999.000',
+      name: 'PC Geming',
+      price: 'Rp28.999.000',
       originalPrice: 'Rp10.499.000',
       discount: '14%',
       rating: 4.7,
@@ -220,7 +220,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       badge: 'Top Seller',
     ),
     Product(
-      name: 'MacBook Air M3 13 inch 8GB 256GB SSD Space Gray',
+      name: 'Leptop Victus geming',
       price: 'Rp16.499.000',
       originalPrice: 'Rp18.999.000',
       discount: '13%',
