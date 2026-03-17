@@ -232,7 +232,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       badge: 'Official Store',
     ),
     Product(
-      name: 'Sony WH-1000XM5 Wireless Noise Cancelling Headphones',
+      name: 'PC Geming I3',
       price: 'Rp4.299.000',
       originalPrice: 'Rp5.499.000',
       discount: '22%',
