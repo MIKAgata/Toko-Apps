@@ -711,7 +711,7 @@ class Settingpage extends StatelessWidget {
           ),
         ),
         content: const Text(
-          'Apakah Anda yakin ingin keluar dari akun?',
+          'yakin ingin keluar dari akun?',
           style: TextStyle(
             color: TokopediaColors.textSecondary,
           ),
