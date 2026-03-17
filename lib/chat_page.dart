@@ -79,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
       id: '2',
       sellerName: 'Sony Official Store',
       sellerAvatar: '',
-      lastMessage: 'Stok headphone hitam masih ready kak. Langsung checkout aja ya',
+      lastMessage: 'Victus masi ada kak. Langsung checkout aja ya',
       timestamp: 'Kemarin',
       unreadCount: 0,
       isOnline: false,
