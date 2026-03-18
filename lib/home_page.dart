@@ -244,7 +244,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       badge: 'Best Seller',
     ),
     Product(
-      name: 'Apple AirPods Pro 2nd Generation USB-C Original',
+      name: 'PC Geming',
       price: 'Rp3.499.000',
       originalPrice: 'Rp3.999.000',
       discount: '13%',
