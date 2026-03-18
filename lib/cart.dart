@@ -370,7 +370,6 @@ class _CheckInPageState extends State<CheckInPage> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Checkbox
                 Checkbox(
                   value: item.isSelected,
                   onChanged: (value) {
@@ -385,7 +384,6 @@ class _CheckInPageState extends State<CheckInPage> {
                   ),
                 ),
 
-                // Product Image dengan support untuk assets
                 Container(
                   width: 80,
                   height: 80,
@@ -405,7 +403,6 @@ class _CheckInPageState extends State<CheckInPage> {
                       height: 80,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
-                        // Jika gambar tidak ditemukan, tampilkan placeholder
                         return Center(
                           child: Icon(
                             Icons.image_outlined,
@@ -439,7 +436,6 @@ class _CheckInPageState extends State<CheckInPage> {
 
                       const SizedBox(height: 4),
 
-                      // Variant
                       Text(
                         item.variant,
                         style: const TextStyle(
@@ -450,7 +446,7 @@ class _CheckInPageState extends State<CheckInPage> {
 
                       const SizedBox(height: 8),
 
-                      // Price
+                      
                       Row(
                         children: [
                           Text(
@@ -475,7 +471,6 @@ class _CheckInPageState extends State<CheckInPage> {
 
                       const SizedBox(height: 12),
 
-                      // Quantity Controls & Note
                       Row(
                         children: [
                           // Note Button
@@ -502,7 +497,6 @@ class _CheckInPageState extends State<CheckInPage> {
 
                           const Spacer(),
 
-                          // Quantity Control
                           _buildQuantityControl(item),
                         ],
                       ),
@@ -517,7 +511,6 @@ class _CheckInPageState extends State<CheckInPage> {
     );
   }
 
-  /// Build Quantity Control
   Widget _buildQuantityControl(CartItem item) {
     return Container(
       decoration: BoxDecoration(
