@@ -118,7 +118,7 @@ class _ProfilePageState extends State<ProfilePage> {
       id: '5',
       sellerName: 'Tech Accessories Hub',
       sellerAvatar: '',
-      lastMessage: 'Garansi resmi 1 tahun kak, bisa claim di service center',
+      lastMessage: 'Garansi resmi 1 tahun bisa diclaim ',
       timestamp: '1 minggu lalu',
       unreadCount: 0,
       isOnline: false,
@@ -155,7 +155,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  /// Mobile Layout (WhatsApp Mobile)
   Widget _buildMobileLayout() {
     if (_selectedChat != null) {
       return ChatDetailPage(
