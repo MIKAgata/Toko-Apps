@@ -256,9 +256,9 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       badge: 'Power Merchant',
     ),
     Product(
-      name: 'iPad Air M2 11 inch WiFi 128GB 2024 - Space Gray',
+      name: 'Leptop ROG',
       price: 'Rp9.499.000',
-      originalPrice: 'Rp10.999.000',
+      originalPrice: 'Rp18.999.000',
       discount: '14%',
       rating: 4.9,
       sold: 678,
