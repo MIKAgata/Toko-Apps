@@ -268,7 +268,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
       badge: 'Official Store',
     ),
     Product(
-      name: 'Logitech MX Master 3S Wireless Mouse - Graphite',
+      name: 'Leptop ROG STRIX',
       price: 'Rp1.399.000',
       originalPrice: 'Rp1.699.000',
       discount: '18%',
