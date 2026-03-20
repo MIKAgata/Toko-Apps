@@ -269,7 +269,7 @@ class _TokoWithAppBarState extends State<TokoWithAppBar> {
     ),
     Product(
       name: 'Leptop ROG STRIX',
-      price: 'Rp1.399.000',
+      price: 'Rp31.399.000',
       originalPrice: 'Rp1.699.000',
       discount: '18%',
       rating: 4.8,
